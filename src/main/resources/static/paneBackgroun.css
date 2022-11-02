@@ -1,0 +1,8 @@
+#pane{
+    -fx-background-image: url("../images/futbol_manager.jpg");
+    -fx-background-repeat: stretch;
+    -fx-background-size: 1233 800;
+    -fx-background-position: relative;
+
+
+}

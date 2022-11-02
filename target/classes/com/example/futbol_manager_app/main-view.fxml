@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="555.0" style="-fx-background-color: aliceblue" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.futbol_manager_app.MainController">
+    <children>
+
+        <AnchorPane id="E93A15" prefHeight="400.0" prefWidth="244.0" style="-fx-background-color: #EA5130">
+            <children>
+                <ImageView fitHeight="234.0" fitWidth="199.0" layoutX="-2.0" layoutY="1.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@../../../images/Logo1.png" />
+                    </image>
+                </ImageView>
+                <Label layoutX="15.0" layoutY="191.0" prefHeight="10.0" prefWidth="191.0" text="rudymarquezigbm@gmail.com" textAlignment="CENTER">
+                    <font>
+                        <Font size="13.0" />
+                    </font>
+                </Label>
+                <Label layoutX="15.0" layoutY="237.0" prefHeight="37.0" prefWidth="212.0" style="-fx-text-alignment: right" text="Log in as guest">
+                    <font>
+                        <Font name="Arial Bold" size="25.0" />
+                    </font>
+                </Label>
+                <Label layoutX="86.0" layoutY="281.0" prefHeight="25.0" prefWidth="70.0" text="user">
+                    <font>
+                        <Font name="Arial Bold" size="20.0" />
+                    </font>
+                </Label>
+                <Label layoutX="64.0" layoutY="324.0" prefHeight="25.0" prefWidth="109.0" text="welcome1">
+                    <font>
+                        <Font name="Arial Bold" size="20.0" />
+                    </font>
+                </Label>
+            </children>
+        </AnchorPane>
+
+        <AnchorPane prefHeight="400.0" prefWidth="310.0">
+            <children>
+                <ImageView fitHeight="84.0" fitWidth="150.0" layoutX="151.0" layoutY="23.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@../../../images/lock-icon.png" />
+                    </image>
+                </ImageView>
+                <Label layoutX="28.0" layoutY="139.0" prefHeight="20.0" prefWidth="84.0" text="Username">
+                    <font>
+                        <Font name="Consolas Bold" size="14.0" />
+                    </font>
+                </Label>
+                <Label layoutX="28.0" layoutY="200.0" prefHeight="19.0" prefWidth="70.0" text="Password">
+                    <font>
+                        <Font name="Consolas Bold" size="14.0" />
+                    </font>
+                </Label>
+                <TextField fx:id="textfield_username" layoutX="98.0" layoutY="137.0" prefHeight="25.0" prefWidth="191.0" />
+                <TextField fx:id="textfield_password" layoutX="98.0" layoutY="197.0" prefHeight="25.0" prefWidth="191.0" />
+                <Button fx:id="btn_login" layoutX="98.0" layoutY="282.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="70.0" style="-fx-background-color: #EA5130" text="Log In" textFill="#0a0a0a" />
+                <Label fx:id="lbl_wrongpassword" layoutX="63.0" layoutY="230.0" prefHeight="25.0" prefWidth="228.0" text="Incorrect Password" textFill="#ff0606" visible="false">
+                    <font>
+                        <Font size="16.0" />
+                    </font>
+                </Label>
+            </children></AnchorPane>
+
+    </children>
+</HBox>

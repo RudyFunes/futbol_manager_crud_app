@@ -1,0 +1,317 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?xml-stylesheet href="../static/paneBackground.css"
+        type="text/css"?>
+
+<AnchorPane prefHeight="780.0" prefWidth="1216.0" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.futbol_manager_app.TablesController">
+    <children>
+        <ToolBar prefHeight="45.0" prefWidth="1233.0" style="-fx-background-color: #4FD1F0">
+            <items>
+                <Button fx:id="btn_league" mnemonicParsing="false" prefHeight="31.0" prefWidth="91.0" style="-fx-background-color: aliceblue" text="League">
+                    <font>
+                        <Font name="Arial Bold" size="14.0" />
+                    </font></Button>
+                <Separator prefHeight="45.0" prefWidth="27.0" />
+                <Button fx:id="btn_team" mnemonicParsing="false" prefHeight="31.0" prefWidth="99.0" style="-fx-background-color: aliceblue" text="Team">
+                    <font>
+                        <Font name="Arial Bold" size="14.0" />
+                    </font>
+                </Button>
+                <Separator prefHeight="45.0" prefWidth="28.0" />
+                <Button fx:id="btn_player" mnemonicParsing="false" prefHeight="31.0" prefWidth="91.0" style="-fx-background-color: aliceblue" text="Player">
+                    <font>
+                        <Font name="Arial Bold" size="14.0" />
+                    </font>
+                </Button>
+                <Separator prefHeight="45.0" prefWidth="36.0" />
+                <Button fx:id="btn_clear" mnemonicParsing="false" prefHeight="31.0" prefWidth="91.0" style="-fx-background-color: aliceblue" text="Clear">
+                    <font>
+                        <Font name="Arial Bold" size="14.0" />
+                    </font>
+                </Button>
+                <Separator prefHeight="45.0" prefWidth="34.0" />
+                <Button fx:id="btn_logout" mnemonicParsing="false" prefHeight="31.0" prefWidth="91.0" style="-fx-background-color: aliceblue" text="Log out">
+                    <font>
+                        <Font name="Arial Bold" size="14.0" />
+                    </font>
+                </Button>
+            </items>
+            <padding>
+                <Insets left="35.0" />
+            </padding>
+        </ToolBar>
+        <Separator layoutX="-49.0" layoutY="44.0" prefWidth="200.0" />
+        <AnchorPane layoutY="45.0" prefHeight="735.0" prefWidth="1233.0" style="-fx-background-color: aliceblue">
+            <children>
+                <TableView fx:id="table_view_leagues" layoutX="306.0" layoutY="14.0" prefHeight="373.0" prefWidth="902.0" visible="true">
+                    <columns>
+                        <TableColumn fx:id="table_column_league_id" prefWidth="75.0" text="ID" />
+                        <TableColumn fx:id="table_column_league_country" prefWidth="281.0" text="Country" />
+                        <TableColumn fx:id="table_column_league_league" prefWidth="365.0" text="League" />
+                        <TableColumn fx:id="table_column_League_year" prefWidth="180.0" text="Year" />
+                    </columns>
+                </TableView>
+                <TableView fx:id="table_view_team" layoutX="337.0" layoutY="6.0" prefHeight="382.0" prefWidth="892.0" visible="false">
+                    <columns>
+                        <TableColumn fx:id="table_column_team_id" prefWidth="29.0" text="ID" />
+                        <TableColumn fx:id="table_column_team_name" prefWidth="230.0" text="Name" />
+                        <TableColumn fx:id="table_column_team_location" prefWidth="141.0" text="Location" />
+                        <TableColumn fx:id="table_column_team_stadium" prefWidth="203.0" text="Stadium" />
+                        <TableColumn fx:id="table_column_team_capacity" prefWidth="72.0" text="Capacity" />
+                        <TableColumn fx:id="table_column_team_league" prefWidth="216.0" text="League" />
+                    </columns>
+                </TableView>
+                <TableView fx:id="table_view_player" layoutX="361.0" layoutY="6.0" prefHeight="382.0" prefWidth="867.0" visible="false">
+                    <columns>
+                        <TableColumn fx:id="table_column_player_id" prefWidth="67.0" text="ID" />
+                        <TableColumn fx:id="table_column_player_name" prefWidth="191.0" text="Name" />
+                        <TableColumn fx:id="table_column_player_number" prefWidth="53.0" text="Number" />
+                        <TableColumn fx:id="table_column_player_age" prefWidth="38.0" text="Age" />
+                        <TableColumn fx:id="table_column_player_team" prefWidth="199.0" text="Team" />
+                        <TableColumn fx:id="table_column_player_position" prefWidth="104.0" text="Position" />
+                        <TableColumn fx:id="table_column_player_nationality" prefWidth="214.0" text="Nationality" />
+                    </columns>
+                </TableView>
+                <Pane fx:id="pane_league" layoutY="3.0" prefHeight="389.0" prefWidth="300.0" visible="true">
+                    <children>
+                        <VBox layoutX="13.0" layoutY="14.0" prefHeight="259.0" prefWidth="115.0" spacing="45.0">
+                            <children>
+                                <Label prefHeight="25.0" prefWidth="59.0" text="ID">
+                                    <font>
+                                        <Font name="Arial Bold" size="14.0" />
+                                    </font>
+                                </Label>
+                                <Label layoutX="10.0" layoutY="10.0" prefHeight="25.0" prefWidth="59.0" text="Country">
+                                    <font>
+                                        <Font name="Arial Bold" size="14.0" />
+                                    </font>
+                                </Label>
+                                <Label layoutX="10.0" layoutY="35.0" prefHeight="25.0" prefWidth="59.0" text="League">
+                                    <font>
+                                        <Font name="Arial Bold" size="14.0" />
+                                    </font>
+                                </Label>
+                                <Label layoutX="10.0" layoutY="60.0" prefHeight="25.0" prefWidth="59.0" text="Year">
+                                    <font>
+                                        <Font name="Arial Bold" size="14.0" />
+                                    </font>
+                                </Label>
+                            </children>
+                        </VBox>
+                        <VBox layoutX="79.0" layoutY="14.0" prefHeight="259.0" prefWidth="191.0" spacing="44.0">
+                            <children>
+                                <TextField fx:id="txt_league_id">
+                                    <font>
+                                        <Font name="Arial" size="14.0" />
+                                    </font>
+                                </TextField>
+                                <TextField fx:id="txt_league_country" layoutX="10.0" layoutY="10.0">
+                                    <font>
+                                        <Font name="Arial" size="14.0" />
+                                    </font>
+                                </TextField>
+                                <TextField fx:id="txt_league_league" layoutX="10.0" layoutY="36.0">
+                                    <font>
+                                        <Font name="Arial" size="14.0" />
+                                    </font>
+                                </TextField>
+                                <TextField fx:id="txt_league_year" layoutX="10.0" layoutY="62.0">
+                                    <font>
+                                        <Font name="Arial" size="14.0" />
+                                    </font>
+                                </TextField>
+                            </children>
+                        </VBox>
+                        <Button fx:id="btn_delete_league" layoutX="197.0" layoutY="332.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="79.0" style="-fx-background-color: #EA5130" text="Delete">
+                            <font>
+                                <Font name="Arial Bold" size="14.0" />
+                            </font></Button>
+                        <Button fx:id="btn_update_league" layoutX="106.0" layoutY="332.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="79.0" style="-fx-background-color: #30EAC0" text="Update">
+                            <font>
+                                <Font name="Arial Bold" size="14.0" />
+                            </font></Button>
+                        <Button fx:id="btn_insert_league" layoutX="13.0" layoutY="332.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="79.0" style="-fx-background-color: #30C5EA" text="Insert">
+                            <font>
+                                <Font name="Arial Bold" size="14.0" />
+                            </font>
+                        </Button>
+                        <Label fx:id="lbl_league_message1" layoutX="51.0" layoutY="261.0" prefHeight="25.0" prefWidth="219.0" text="some message" textFill="#e40000" visible="false">
+                            <font>
+                                <Font name="Arial Bold" size="14.0" />
+                            </font>
+                        </Label>
+                        <Label fx:id="lbl_league_message2" layoutX="51.0" layoutY="293.0" prefHeight="25.0" prefWidth="219.0" text="Some message" textFill="#ff0707" visible="false">
+                            <font>
+                                <Font name="Arial Bold" size="14.0" />
+                            </font>
+                        </Label>
+                    </children>
+                </Pane>
+                <!--             Image Background pane-->
+                <Pane id="pane" layoutX="-4.0" layoutY="389.0" prefHeight="346.0" prefWidth="1233.0" stylesheets="@../../../static/paneBackgroun.css">
+                    <children>
+                        <Label fx:id="lbl_welcome" layoutX="342.0" layoutY="41.0" prefHeight="53.0" prefWidth="505.0" text="Welcome to Futbol Manager" textFill="#d6550b">
+                            <font>
+                                <Font name="System Bold" size="36.0" />
+                            </font>
+                        </Label>
+                    </children></Pane>
+                <!--            Team Pane-->
+                <Pane fx:id="pane_team" layoutY="3.0" prefHeight="389.0" prefWidth="326.0" visible="false">
+                    <children>
+                        <VBox layoutX="14.0" layoutY="14.0" prefHeight="266.0" prefWidth="91.0" spacing="25.0">
+                            <children>
+                                <Label prefHeight="23.0" prefWidth="53.0" text="ID">
+                                    <font>
+                                        <Font name="Arial Bold" size="14.0" />
+                                    </font>
+                                </Label>
+                                <Label layoutX="10.0" layoutY="10.0" prefHeight="23.0" prefWidth="53.0" text="Name">
+                                    <font>
+                                        <Font name="Arial Bold" size="14.0" />
+                                    </font>
+                                </Label>
+                                <Label layoutX="10.0" layoutY="33.0" prefHeight="23.0" prefWidth="77.0" text="Location">
+                                    <font>
+                                        <Font name="Arial Bold" size="14.0" />
+                                    </font>
+                                </Label>
+                                <Label layoutX="10.0" layoutY="56.0" prefHeight="23.0" prefWidth="66.0" text="Stadium">
+                                    <font>
+                                        <Font name="Arial Bold" size="14.0" />
+                                    </font>
+                                </Label>
+                                <Label layoutX="10.0" layoutY="79.0" prefHeight="23.0" prefWidth="74.0" text="Capacity">
+                                    <font>
+                                        <Font name="Arial Bold" size="14.0" />
+                                    </font>
+                                </Label>
+                                <Label layoutX="10.0" layoutY="102.0" prefHeight="23.0" prefWidth="70.0" text="League">
+                                    <font>
+                                        <Font name="Arial Bold" size="14.0" />
+                                    </font>
+                                </Label>
+                            </children>
+                        </VBox>
+                        <VBox layoutX="114.0" layoutY="14.0" prefHeight="276.0" prefWidth="191.0" spacing="23.0">
+                            <children>
+                                <TextField fx:id="txt_team_id" />
+                                <TextField fx:id="txt_team_name" layoutX="10.0" layoutY="10.0" />
+                                <TextField fx:id="txt_team_location" layoutX="10.0" layoutY="35.0" />
+                                <TextField fx:id="txt_team_stadium" layoutX="10.0" layoutY="60.0" />
+                                <TextField fx:id="txt_team_capacity" layoutX="10.0" layoutY="85.0" />
+                                <TextField fx:id="txt_team_league" layoutX="10.0" layoutY="110.0" />
+                            </children>
+                        </VBox>
+                        <Button fx:id="btn_delete_team" layoutX="226.0" layoutY="355.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="79.0" style="-fx-background-color: #EA5130" text="Delete">
+                            <font>
+                                <Font name="Arial Bold" size="14.0" />
+                            </font></Button>
+                        <Button fx:id="btn_update_team" layoutX="114.0" layoutY="355.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="79.0" style="-fx-background-color: #30EAC0" text="Update">
+                            <font>
+                                <Font name="Arial Bold" size="14.0" />
+                            </font></Button>
+                        <Button fx:id="btn_insert_team" layoutX="14.0" layoutY="355.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="79.0" style="-fx-background-color: #30C5EA" text="Insert">
+                            <font>
+                                <Font name="Arial Bold" size="14.0" />
+                            </font>
+                        </Button>
+                        <Label fx:id="lbl_team_message1" layoutX="54.0" layoutY="313.0" prefHeight="31.0" prefWidth="252.0" text="some message" textFill="#ee0d0d" visible="false">
+                            <font>
+                                <Font name="Arial Bold" size="14.0" />
+                            </font>
+                        </Label>
+                        <Label fx:id="lbl_team_message2" layoutX="54.0" layoutY="290.0" prefHeight="31.0" prefWidth="240.0" text="some message" textFill="#ee0d0d" visible="false">
+                            <font>
+                                <Font name="Arial Bold" size="14.0" />
+                            </font>
+                        </Label>
+                    </children>
+                </Pane>
+                <!--             Player pane-->
+                <Pane fx:id="pane_player" layoutY="6.0" prefHeight="382.0" prefWidth="358.0" visible="false">
+                    <children>
+                        <VBox layoutX="20.0" layoutY="14.0" prefHeight="270.0" prefWidth="100.0" spacing="28.0">
+                            <children>
+                                <Label prefHeight="22.0" prefWidth="58.0" text="ID">
+                                    <font>
+                                        <Font name="Arial Bold" size="14.0" />
+                                    </font>
+                                </Label>
+                                <Label layoutX="10.0" layoutY="10.0" prefHeight="22.0" prefWidth="58.0" text="Name">
+                                    <font>
+                                        <Font name="Arial Bold" size="14.0" />
+                                    </font>
+                                </Label>
+                                <Label layoutX="10.0" layoutY="32.0" prefHeight="22.0" prefWidth="58.0" text="Number">
+                                    <font>
+                                        <Font name="Arial Bold" size="14.0" />
+                                    </font>
+                                </Label>
+                                <Label layoutX="10.0" layoutY="32.0" prefHeight="22.0" prefWidth="58.0" text="Age">
+                                    <font>
+                                        <Font name="Arial Bold" size="14.0" />
+                                    </font>
+                                </Label>
+                                <Label layoutX="10.0" layoutY="76.0" prefHeight="22.0" prefWidth="58.0" text="Team">
+                                    <font>
+                                        <Font name="Arial Bold" size="14.0" />
+                                    </font>
+                                </Label>
+                                <Label layoutX="10.0" layoutY="98.0" prefHeight="22.0" prefWidth="58.0" text="Position">
+                                    <font>
+                                        <Font name="Arial Bold" size="14.0" />
+                                    </font>
+                                </Label>
+                                <Label layoutX="10.0" layoutY="120.0" prefHeight="22.0" prefWidth="81.0" text="Nationality">
+                                    <font>
+                                        <Font name="Arial Bold" size="14.0" />
+                                    </font>
+                                </Label>
+                            </children>
+                        </VBox>
+                        <VBox layoutX="104.0" layoutY="8.0" prefHeight="270.0" prefWidth="191.0" spacing="19.0">
+                            <children>
+                                <TextField fx:id="txt_player_id" />
+                                <TextField fx:id="txt_player_name" layoutX="10.0" layoutY="10.0" />
+                                <TextField fx:id="txt_player_number" layoutX="10.0" layoutY="35.0" />
+                                <TextField fx:id="txt_player_age" layoutX="10.0" layoutY="60.0" />
+                                <TextField fx:id="txt_player_team" layoutX="10.0" layoutY="85.0" />
+                                <TextField fx:id="txt_player_position" layoutX="10.0" layoutY="110.0" />
+                                <TextField fx:id="txt_player_nationality" layoutX="10.0" layoutY="135.0" />
+                            </children>
+                        </VBox>
+                        <Button fx:id="btn_delete_player" layoutX="229.0" layoutY="345.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="79.0" style="-fx-background-color: #EA5130" text="Delete">
+                            <font>
+                                <Font name="Arial Bold" size="14.0" />
+                            </font></Button>
+                        <Button fx:id="btn_update_player" layoutX="120.0" layoutY="345.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="79.0" style="-fx-background-color: #30EAC0" text="Update">
+                            <font>
+                                <Font name="Arial Bold" size="14.0" />
+                            </font></Button>
+                        <Button fx:id="btn_insert_player" layoutX="14.0" layoutY="345.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="79.0" style="-fx-background-color: #30C5EA" text="Insert">
+                            <font>
+                                <Font name="Arial Bold" size="14.0" />
+                            </font>
+                        </Button>
+                        <Label fx:id="lbl_player_message1" layoutX="64.0" layoutY="255.0" prefHeight="31.0" prefWidth="219.0" text="some message" textFill="#ff0202">
+                            <font>
+                                <Font name="Arial Bold" size="14.0" />
+                            </font>
+                        </Label>
+                        <Label fx:id="lbl_player_message2" layoutX="55.0" layoutY="290.0" prefHeight="31.0" prefWidth="227.0" text="some message" textFill="#ff0202">
+                            <font>
+                                <Font name="Arial Bold" size="14.0" />
+                            </font>
+                        </Label>
+                    </children>
+                </Pane>
+                <!--             player Pane-->
+
+            </children></AnchorPane>
+    </children>
+</AnchorPane>
