@@ -7,7 +7,7 @@
 <?xml-stylesheet href="../static/paneBackground.css"
         type="text/css"?>
 
-<AnchorPane prefHeight="780.0" prefWidth="1216.0" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.futbol_manager_app.TablesController">
+<AnchorPane prefHeight="780.0" prefWidth="1216.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.futbol_manager_app.TablesController">
     <children>
         <ToolBar prefHeight="45.0" prefWidth="1233.0" style="-fx-background-color: #4FD1F0">
             <items>
@@ -220,12 +220,7 @@
                                 <Font name="Arial Bold" size="14.0" />
                             </font>
                         </Button>
-                        <Label fx:id="lbl_team_message1" layoutX="54.0" layoutY="313.0" prefHeight="31.0" prefWidth="252.0" text="some message" textFill="#ee0d0d" visible="false">
-                            <font>
-                                <Font name="Arial Bold" size="14.0" />
-                            </font>
-                        </Label>
-                        <Label fx:id="lbl_team_message2" layoutX="54.0" layoutY="290.0" prefHeight="31.0" prefWidth="240.0" text="some message" textFill="#ee0d0d" visible="false">
+                        <Label fx:id="lbl_team_message1" layoutX="19.0" layoutY="290.0" prefHeight="31.0" prefWidth="270.0" text="some message" textFill="#ee0d0d" visible="false">
                             <font>
                                 <Font name="Arial Bold" size="14.0" />
                             </font>
@@ -298,12 +293,7 @@
                                 <Font name="Arial Bold" size="14.0" />
                             </font>
                         </Button>
-                        <Label fx:id="lbl_player_message1" layoutX="64.0" layoutY="255.0" prefHeight="31.0" prefWidth="219.0" text="some message" textFill="#ff0202">
-                            <font>
-                                <Font name="Arial Bold" size="14.0" />
-                            </font>
-                        </Label>
-                        <Label fx:id="lbl_player_message2" layoutX="55.0" layoutY="290.0" prefHeight="31.0" prefWidth="227.0" text="some message" textFill="#ff0202">
+                        <Label fx:id="lbl_player_message1" layoutX="43.0" layoutY="305.0" prefHeight="31.0" prefWidth="252.0" text="some message" textFill="#ff0202" visible="false">
                             <font>
                                 <Font name="Arial Bold" size="14.0" />
                             </font>

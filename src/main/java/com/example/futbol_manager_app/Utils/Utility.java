@@ -1,10 +1,14 @@
 package com.example.futbol_manager_app.Utils;
 
+import com.example.futbol_manager_app.POJOS.Teams;
+import javafx.collections.ObservableList;
 import javafx.event.Event;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.function.Predicate;
 
 
@@ -70,9 +74,12 @@ public class Utility  extends TextField {
         return 20;
     }
 
-    public static  boolean TextFieldInputValidation(Predicate<String> validation){
+    public static int checkIfTeamLeagueExist(String league, ObservableList<Teams> teams){
 
-        return true;
+//        HashMap<String,Integer> league
+
+
+        return 0;
     }
 
 

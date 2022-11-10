@@ -11,8 +11,17 @@ public class Players {
     private  String player_position;
     private String player_country;
 
+    public String getPlayer_team() {
+        return player_team;
+    }
 
-    public Players(int id, String player_name, int player_number, int player_age, int team_id, String player_position, String player_country) {
+    public void setPlayer_team(String player_team) {
+        this.player_team = player_team;
+    }
+
+    private String player_team;
+
+    public Players(int id, String player_name, int player_number, int player_age, int team_id, String player_position, String player_country,String player_team) {
         this.id = id;
         this.player_name = player_name;
         this.player_number = player_number;
@@ -20,6 +29,7 @@ public class Players {
         this.team_id = team_id;
         this.player_position = player_position;
         this.player_country = player_country;
+        this.player_team = player_team;
     }
 
     public int getId() {

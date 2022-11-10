@@ -67,6 +67,8 @@ public class TablesController implements Initializable {
 
     //------- stored all leagues names and leagues id  in a Hashmap Variable----
     HashMap <String,Integer> allLeagues;
+    HashMap <String, Integer> allTeams;
+    HashMap <String,Integer> allPlayers;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -78,7 +80,11 @@ public class TablesController implements Initializable {
         buttons.add(btn_player); buttons.add(btn_league);
         buttons.add(btn_clear); buttons.add(btn_logout);
 
+        //initialize maps
         allLeagues = new HashMap<>();
+        allTeams = new HashMap<>();
+        allPlayers = new HashMap<>();
+        //display league table at run time
         try {
             league_table();
         } catch (SQLException e) {
@@ -230,8 +236,13 @@ public class TablesController implements Initializable {
         table_column_team_capacity.setCellValueFactory(new PropertyValueFactory<Teams, Integer>("capacity"));
         table_column_team_league.setCellValueFactory(new PropertyValueFactory<Teams, String>("league"));
 
-
         table_view_team.setItems(teamsList);
+        //------- stored team name and team_id in a Hashmap Variable
+        for (Teams teams : teamsList){
+            allTeams.put(teams.getTeam_name(), teams.getId());
+        }
+
+
     }
     private void league_table() throws SQLException {
         // ObservableList<Leagues> leaguesList = DBConnection.getLeagues();
@@ -257,11 +268,20 @@ public class TablesController implements Initializable {
         table_column_player_name.setCellValueFactory(new PropertyValueFactory<>("player_name"));
         table_column_player_number.setCellValueFactory(new PropertyValueFactory<>("player_number"));
         table_column_player_age.setCellValueFactory(new PropertyValueFactory<>("player_age"));
-        table_column_player_team.setCellValueFactory(new PropertyValueFactory<>("team_id"));
+        table_column_player_team.setCellValueFactory(new PropertyValueFactory<>("player_team"));
         table_column_player_position.setCellValueFactory(new PropertyValueFactory<>("player_position"));
         table_column_player_nationality.setCellValueFactory(new PropertyValueFactory<>("player_country"));
 
         table_view_player.setItems(playersList);
+        //------- stored team name and team_id in a Hashmap Variable
+        for (Players players : playersList){
+            allPlayers.put(players.getPlayer_name(),players.getId());
+        }
+    }
+
+    //this method return all teams store in the map to the getTeams method to see if already exist
+    public HashMap<String, Integer> getLeagueMap(){
+        return allLeagues;
     }
     /* the following methods Are teh CRUD for Leagues Table*/
     private void leagueInsertRecord() throws SQLException {
@@ -321,6 +341,7 @@ public class TablesController implements Initializable {
                     if (txt_league_year.getText().equals("")){
                         txt_league_year.setText(String.valueOf(l.getYear()));
                     }
+
                     String query = "UPDATE countrie_league SET country = '" + txt_league_country.getText() +"', league_name ='" + txt_league_league.getText()
                             + "', founded = " + txt_league_year.getText() + " WHERE league_id = " + txt_league_id.getText() +";";
 
@@ -329,6 +350,7 @@ public class TablesController implements Initializable {
                     lbl_league_message1.setText("Successful updated row id: " + txt_league_id.getText());
                     in = true;
                     updated = true;
+                    txt_league_id.setStyle(null);
                     clear();
                     break;
                 }
@@ -336,7 +358,7 @@ public class TablesController implements Initializable {
             }//end for loop
             if(!in){
                 lbl_league_message1.setVisible(true);
-                lbl_league_message1.setText("ID not found in table");
+                lbl_league_message1.setText("League ID not found");
                 txt_league_id.setStyle(null);
             }
         }
@@ -391,55 +413,166 @@ public class TablesController implements Initializable {
     private void teamInsertRecord() throws SQLException {
         boolean idIsDigit = Utility.checkIfHasOnlyDigits(txt_team_id.getText());
         boolean capacityIsDigit = Utility.checkIfHasOnlyDigits(txt_team_capacity.getText());
+        boolean leagueFound = false;
         String query = "";
         lbl_team_message1.setVisible(false);
-        //check to see if league already exist in the database
-        for (Map.Entry<String,Integer> entry : allLeagues.entrySet()){
-            if (txt_team_league.getText().equals(entry.getKey())){
-                query =  "INSERT INTO team (team_name,team_location,stadium,capacity,league_id)" +
-                        "VALUES ('" + txt_team_name.getText() + "','" + txt_team_location.getText() +  "','"  + txt_team_stadium.getText() + "'," +
-                        txt_team_capacity.getText()   + "," + entry.getValue() +");";
-                System.out.println(query);
-                break;
-            }
-            System.out.println("Key " + entry.getKey() + " value " + entry.getValue());
-        }
-        System.out.println(query);
+
+
+
         //validate query
-        if (!query.equals("")){
+        if ( (idIsDigit && capacityIsDigit) && ( !txt_team_id.getText().equals("") || !txt_team_capacity.getText().equals("")) ){
+            //check to see if league already exist in the database
+            for (Map.Entry<String,Integer> entry : allLeagues.entrySet()){
+                if (txt_team_league.getText().equals(entry.getKey())){
+                    query =  "INSERT INTO team (team_name,team_location,stadium,capacity,league_id)" +
+                            "VALUES ('" + txt_team_name.getText() + "','" + txt_team_location.getText() +  "','"  + txt_team_stadium.getText() + "'," +
+                            txt_team_capacity.getText()   + "," + entry.getValue() +");";
+                            leagueFound = true;
+                    break;
+                }
+            }
+
             /* validation check for text boxes*/
-            if ((idIsDigit && capacityIsDigit) && ( (txt_team_id.getText().length() >0) && (txt_team_capacity.getText().length() > 0))){
                 if (!txt_team_name.getText().equals("") && !txt_team_location.getText().equals("") && !txt_team_stadium.getText().equals("") &&
                         !txt_team_capacity.getText().equals("")  && !txt_team_league.getText().equals("")){
 
                     DBConnection.executeQuery(query);
                     lbl_team_message1.setVisible(true);
                     lbl_team_message1.setText("Row successfully added");
+                    txt_team_name.setStyle(null);
+                    txt_team_stadium.setStyle(null);
+                    txt_team_location.setStyle(null);
+
+
                     clear();
                 }
                 else {
+                    txt_team_id.setStyle(null);
+                    txt_team_capacity.setStyle(null);
                     txt_team_name.setStyle("-fx-border-color: red; -fx-border-width: 2px;");
                     txt_team_stadium.setStyle("-fx-border-color: red; -fx-border-width: 2px;");
                     txt_team_location.setStyle("-fx-border-color: red; -fx-border-width: 2px;");
-                    lbl_league_message1.setVisible(true);
-                    lbl_league_message1.setText("All Field Are Required");
+                    lbl_team_message1.setVisible(true);
+                    lbl_team_message1.setText("All Field Are Required");
+                    txt_team_league.setStyle(null);
+                    if (!leagueFound){
+                        lbl_team_message1.setText("Make sure league is in Database");
+                        lbl_team_message1.setVisible(true);
+                        txt_team_league.setStyle("-fx-border-color: red; -fx-border-width: 2px;");
+                    }
+
                 }
-            }
-            //
-            else {
-                lbl_team_message1.setVisible(true);
-                lbl_team_message1.setText("ID and Capacity must be Digits");
-                txt_league_league.setStyle(null);
-                txt_league_country.setStyle(null);
-            }
-        }
-      else {
-            lbl_team_message1.setText("Make sure league is in Database");
+           }
+        else {
             lbl_team_message1.setVisible(true);
+            lbl_team_message1.setText("ID and Capacity must be Digits");
+            txt_league_league.setStyle(null);
+            txt_league_country.setStyle(null);
+            txt_team_id.setStyle("-fx-border-color: red; -fx-border-width: 2px;");
+            txt_team_capacity.setStyle("-fx-border-color: red; -fx-border-width: 2px;");
+            clear();
         }
 
+
     }// end of teamInsertMethod
-    private void teamUpdateRecord(){}
+    private void teamUpdateRecord() throws SQLException {
+        boolean updated = false;
+        boolean in = false;
+        boolean leagueFound = false;
+        boolean idIsDigit = Utility.checkIfHasOnlyDigits(txt_team_id.getText());
+        boolean capacityIsDigit = Utility.checkIfHasOnlyDigits(txt_team_capacity.getText());
+        lbl_league_message1.setVisible(false);
+
+
+        /* validation check for text boxes*/
+        if ( (idIsDigit && !txt_team_id.getText().equals(""))  && (capacityIsDigit || txt_team_capacity.getText().equals("")) ){
+            int id = Integer.parseInt(txt_team_id.getText());
+            for (Teams t : teamsList) {
+                if (t.getId() == id) {
+
+                    if (txt_team_name.getText().equals("")  ){
+                        txt_team_name.setText(t.getTeam_name()) ;
+                    }
+                    if (txt_team_location.getText().equals("") ){
+                        txt_team_location.setText(t.getTeam_location());
+                    }
+                    if (txt_team_stadium.getText().equals("")){
+                        txt_team_stadium.setText(t.getStadium());
+                    }
+                    if(txt_team_capacity.getText().equals("")){
+                        txt_team_capacity.setText(String.valueOf(t.getCapacity()));
+                    }
+
+                    //if not league selected to be updated keeps the same already in data
+                    if (txt_team_league.getText().equals("")){
+                        for(Map.Entry<String,Integer> entry : allLeagues.entrySet()){
+                            if (t.getLeague_id() == entry.getValue()){
+                                txt_team_league.setText(String.valueOf(entry.getKey()));
+                                leagueFound = true;
+                                break;
+                            }
+                        }
+                    }
+                    //check to see if league exist before entering the value
+                    if (!txt_team_league.getText().equals("")){
+                        for(Map.Entry<String,Integer> entry : allLeagues.entrySet()){
+                            if (txt_team_league.getText().equals(entry.getKey())){
+                                txt_team_league.setText(String.valueOf(entry.getValue()));
+                                leagueFound = true;
+                                break;
+                            }
+                        }
+                    }
+
+
+                    if (leagueFound ){
+                        String query = "UPDATE team SET team_name = '" + txt_team_name.getText() +"', team_location ='" + txt_team_location.getText()
+                                + "', stadium = '" + txt_team_stadium.getText()   + "', capacity = '" + txt_team_capacity.getText()   + "', league_id = '" + txt_team_league.getText()
+                                + "' WHERE team_id = " + txt_team_id.getText() +";";
+
+                        DBConnection.executeQuery(query);
+                        lbl_team_message1.setVisible(true);
+                        lbl_team_message1.setText("Successful updated team id: " + txt_team_id.getText());
+                        clear();
+                        in = true;
+                        updated = true;
+                        break;
+                    }
+                    else {
+                        lbl_team_message1.setVisible(true);
+                        lbl_team_message1.setText("League not found add it");
+                        in = true;
+                        clear();
+                        break;
+                    }
+                }// end nested if
+
+                if(!in){
+                    lbl_team_message1.setVisible(true);
+                    lbl_team_message1.setText("Team ID not found");
+                }
+
+            }
+        }//end  main for loop
+        else {
+            lbl_team_message1.setVisible(true);
+            lbl_team_message1.setText("ID and Capacity must be digits");
+            clear();
+            if (updated){
+                lbl_team_message1.setStyle(null);
+            }
+        }
+
+    }//end of method
+
+
+
+
+
+
+
+
+
     private void teamDeleteRecord(){}
     /* the following methods Are teh CRUD for Players Table*/
     private void playerInsertRecord(){}

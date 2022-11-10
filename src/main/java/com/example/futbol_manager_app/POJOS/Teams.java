@@ -74,8 +74,6 @@ public class Teams {
     }
 
     public String getLeague() {
-
-
         return league;
     }
 

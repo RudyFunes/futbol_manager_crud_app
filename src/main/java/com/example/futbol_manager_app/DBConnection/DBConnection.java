@@ -5,14 +5,13 @@ import com.example.futbol_manager_app.POJOS.Leagues;
 import com.example.futbol_manager_app.POJOS.Players;
 import com.example.futbol_manager_app.POJOS.Teams;
 import com.example.futbol_manager_app.Utils.FileHandler;
-import com.example.futbol_manager_app.Utils.GetRightLeague;
-import com.example.futbol_manager_app.Utils.Utility;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import org.controlsfx.tools.Utils;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class DBConnection {
 
@@ -21,6 +20,10 @@ public class DBConnection {
     private static PreparedStatement psInsert = null;
     private static PreparedStatement psCheckUserExist = null;
     private static ResultSet resultSet = null;
+
+    //Maps to store league and teams
+    private static HashMap<String,Integer> leaguesMap = new HashMap<>();
+    private static HashMap<String,Integer> teamMap = new HashMap<>();
 
 
 
@@ -39,44 +42,6 @@ public class DBConnection {
         }
     }//end og get connection method
 
-// --------------------------------------------------------------------------------------//
-public  static  ObservableList<Teams> getTeams() throws SQLException {
-    ObservableList<Teams> teamsList = FXCollections.observableArrayList();
-
-    Connection conn = getDBConnection();
-    preparedStatement = conn.prepareStatement("SELECT * FROM team;");
-    resultSet = preparedStatement.executeQuery();
-
-    Teams teams;
-    while (resultSet.next()){
-        String league =  GetRightLeague.getRightLeague(resultSet.getInt("league_id"));
-
-        teams = new Teams(resultSet.getInt("team_id"),resultSet.getString("team_name"),resultSet.getString("team_location"),resultSet.getString("stadium"),resultSet.getBigDecimal("capacity"),resultSet.getInt("league_id"),league);
-        teamsList.add(teams);
-    }
-    closeDBConnection();
-
-    return teamsList;
-}
-    // --------------------------------------------------------------------------------------//
-    public  static  ObservableList<Players> getPlayers() throws SQLException {
-        ObservableList<Players> playersList = FXCollections.observableArrayList();
-
-        Connection conn = getDBConnection();
-        preparedStatement = conn.prepareStatement("SELECT * FROM players;");
-        resultSet = preparedStatement.executeQuery();
-
-        Players players;
-        while (resultSet.next()){
-//            String league =  GetRightLeague.getRightLeague(resultSet.getInt("league_id"));
-
-            players = new Players(resultSet.getInt("player_id"),resultSet.getString("name"),resultSet.getInt("j_number"),resultSet.getInt("age"),resultSet.getInt("team_id"),resultSet.getString("position"),resultSet.getString("nationality"));
-            playersList.add(players);
-        }
-        closeDBConnection();
-
-        return playersList;
-    }
     // --------------------------------------------------------------------------------------//
 
     //get the leagues from my database
@@ -94,9 +59,77 @@ public  static  ObservableList<Teams> getTeams() throws SQLException {
             leaguesList.add(leagues);
         }
         closeDBConnection();
-
+        //populates teh league map with the data from the database
+        for (Leagues league : leaguesList){
+            leaguesMap.put(league.getLeague(),league.getId());
+        }
         return leaguesList;
     }
+    // get right league method
+    public static String getRightLeague(int leagueID){
+
+        //if the league id is found then return the name of the league
+        for(Map.Entry<String,Integer> entry : leaguesMap.entrySet() ){
+            if (entry.getValue() == leagueID){
+                return entry.getKey();
+            }
+        }
+        return "";
+    }
+    // --------------------------------------------------------------------------------------//
+    public  static  ObservableList<Teams> getTeams() throws SQLException {
+
+        ObservableList<Teams> teamsList = FXCollections.observableArrayList();
+
+        Connection conn = getDBConnection();
+        preparedStatement = conn.prepareStatement("SELECT * FROM team;");
+        resultSet = preparedStatement.executeQuery();
+
+        Teams teams;
+        while (resultSet.next()){
+
+            String league =  getRightLeague(resultSet.getInt("league_id"));
+
+            teams = new Teams(resultSet.getInt("team_id"),resultSet.getString("team_name"),resultSet.getString("team_location"),resultSet.getString("stadium"),resultSet.getBigDecimal("capacity"),resultSet.getInt("league_id"),league);
+            teamsList.add(teams);
+        }
+        closeDBConnection();
+        //populates teh team map with the data from the database
+        for (Teams team : teamsList){
+            teamMap.put(team.getTeam_name(),team.getId());
+        }
+        return teamsList;
+    }
+    // get right team method
+    public static String getRightTeam(int leagueID){
+        //if the league id is found then return the name of the league
+        for(Map.Entry<String,Integer> entry : teamMap.entrySet() ){
+            if (entry.getValue() == leagueID){
+                return entry.getKey();
+            }
+        }
+        return "";
+    }
+    // --------------------------------------------------------------------------------------//
+    public  static  ObservableList<Players> getPlayers() throws SQLException {
+        ObservableList<Players> playersList = FXCollections.observableArrayList();
+
+        Connection conn = getDBConnection();
+        preparedStatement = conn.prepareStatement("SELECT * FROM players;");
+        resultSet = preparedStatement.executeQuery();
+
+        Players players;
+        while (resultSet.next()){
+         String playerTeam =  getRightTeam(resultSet.getInt("team_id"));
+
+            players = new Players(resultSet.getInt("player_id"),resultSet.getString("name"),resultSet.getInt("j_number"),resultSet.getInt("age"),resultSet.getInt("team_id"),resultSet.getString("position"),resultSet.getString("nationality"),playerTeam);
+            playersList.add(players);
+        }
+        closeDBConnection();
+
+        return playersList;
+    }
+
 
 //-------------------------------------------------------------------------------------------
     public  static void executeQuery(String query) throws SQLException {
