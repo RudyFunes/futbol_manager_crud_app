@@ -137,13 +137,17 @@ public class TablesController implements Initializable {
                team_table();
                 break;
             case 6 :
-                System.out.println("to be implemented");
+                playerInsertRecord();
+                player_table();
                 break;
             case 7 :
-                System.out.println("to be implemented");
+                playerDeleteReocrd();
+                player_table();
+                clear();
                 break;
             case 8 :
-                System.out.println("to be implemented");
+                playerUpdateRecord();
+                player_table();
                 break;
             case 9 :
                 tablesOff(9);
@@ -179,6 +183,9 @@ public class TablesController implements Initializable {
             pane_team.setVisible(false);
             table_view_player.setVisible(false);
             pane_player.setVisible(false);
+            lbl_team_message1.setVisible(false);
+            lbl_player_message1.setVisible(false);
+            clear();
         }
         //set player visible
         if (num == 10 ){
@@ -188,6 +195,9 @@ public class TablesController implements Initializable {
             pane_team.setVisible(false);
             table_view_player.setVisible(true);
             pane_player.setVisible(true);
+            lbl_league_message1.setVisible(false);
+            lbl_team_message1.setVisible(false);
+            clear();
         }
         //set team visible
         if (num ==9  ){
@@ -197,6 +207,9 @@ public class TablesController implements Initializable {
             pane_team.setVisible(true);
             table_view_player.setVisible(false);
             pane_player.setVisible(false);
+            lbl_player_message1.setVisible(false);
+            lbl_league_message1.setVisible(false);
+            clear();
         }
     }
     /* Clears up text from the Textview field and others*/
@@ -278,14 +291,8 @@ public class TablesController implements Initializable {
             allPlayers.put(players.getPlayer_name(),players.getId());
         }
     }
-
-    //this method return all teams store in the map to the getTeams method to see if already exist
-    public HashMap<String, Integer> getLeagueMap(){
-        return allLeagues;
-    }
     /* the following methods Are teh CRUD for Leagues Table*/
     private void leagueInsertRecord() throws SQLException {
-
         boolean idIsDigit = Utility.checkIfHasOnlyDigits(txt_league_id.getText());
         boolean yearIsDigit = Utility.checkIfHasOnlyDigits(txt_league_year.getText());
         lbl_league_message1.setVisible(false);
@@ -302,8 +309,6 @@ public class TablesController implements Initializable {
                 clear();
             }
             else {
-                txt_league_league.setStyle("-fx-border-color: red; -fx-border-width: 2px;");
-                txt_league_country.setStyle("-fx-border-color: red; -fx-border-width: 2px;");
                 lbl_league_message1.setVisible(true);
                 lbl_league_message1.setText("All Field Are Required");
             }
@@ -312,8 +317,6 @@ public class TablesController implements Initializable {
         else {
             lbl_league_message1.setVisible(true);
             lbl_league_message1.setText("ID and year must be Digits");
-            txt_league_league.setStyle(null);
-            txt_league_country.setStyle(null);
         }
 
 
@@ -349,8 +352,6 @@ public class TablesController implements Initializable {
                     lbl_league_message1.setVisible(true);
                     lbl_league_message1.setText("Successful updated row id: " + txt_league_id.getText());
                     in = true;
-                    updated = true;
-                    txt_league_id.setStyle(null);
                     clear();
                     break;
                 }
@@ -359,22 +360,16 @@ public class TablesController implements Initializable {
             if(!in){
                 lbl_league_message1.setVisible(true);
                 lbl_league_message1.setText("League ID not found");
-                txt_league_id.setStyle(null);
             }
         }
         //
         else {
             lbl_league_message1.setVisible(true);
             lbl_league_message1.setText("ID must be valid row ID");
-            txt_league_id.setStyle("-fx-border-color: red; -fx-border-width: 2px;");
-            if (updated){
-                lbl_league_message1.setStyle(null);
-            }
         }
 
     }
     private void leagueDeleteRecord() throws SQLException {
-        boolean deleted = false;
         boolean idIsNumber = Utility.checkIfHasOnlyDigits(txt_league_id.getText());
         boolean in = false;
         if (idIsNumber && !txt_league_id.getText().equals("")){
@@ -387,7 +382,6 @@ public class TablesController implements Initializable {
                     lbl_league_message1.setVisible(true);
                     lbl_league_message1.setText("Successful Deleted row id: " + txt_league_id.getText());
                     in = true;
-                    deleted = true;
                     break;
                 }
 
@@ -395,19 +389,12 @@ public class TablesController implements Initializable {
             if (!in){
                 lbl_league_message1.setVisible(true);
                 lbl_league_message1.setText("ID not found in table");
-                txt_league_id.setStyle(null);
             }
         }
         else  {
             lbl_league_message1.setVisible(true);
             lbl_league_message1.setText("ID must be valid Number");
-            txt_league_id.setStyle("-fx-border-color: red; -fx-border-width: 2px;");
-            if (deleted){
-                txt_league_id.setStyle(null);
-            }
         }
-
-
     }
     /* the following methods Are teh CRUD for Teams Table*/
     private void teamInsertRecord() throws SQLException {
@@ -416,7 +403,6 @@ public class TablesController implements Initializable {
         boolean leagueFound = false;
         String query = "";
         lbl_team_message1.setVisible(false);
-
 
 
         //validate query
@@ -434,31 +420,19 @@ public class TablesController implements Initializable {
 
             /* validation check for text boxes*/
                 if (!txt_team_name.getText().equals("") && !txt_team_location.getText().equals("") && !txt_team_stadium.getText().equals("") &&
-                        !txt_team_capacity.getText().equals("")  && !txt_team_league.getText().equals("")){
+                        !txt_team_capacity.getText().equals("")  && !txt_team_league.getText().equals("") && leagueFound){
 
                     DBConnection.executeQuery(query);
                     lbl_team_message1.setVisible(true);
                     lbl_team_message1.setText("Row successfully added");
-                    txt_team_name.setStyle(null);
-                    txt_team_stadium.setStyle(null);
-                    txt_team_location.setStyle(null);
-
-
                     clear();
                 }
                 else {
-                    txt_team_id.setStyle(null);
-                    txt_team_capacity.setStyle(null);
-                    txt_team_name.setStyle("-fx-border-color: red; -fx-border-width: 2px;");
-                    txt_team_stadium.setStyle("-fx-border-color: red; -fx-border-width: 2px;");
-                    txt_team_location.setStyle("-fx-border-color: red; -fx-border-width: 2px;");
                     lbl_team_message1.setVisible(true);
                     lbl_team_message1.setText("All Field Are Required");
-                    txt_team_league.setStyle(null);
-                    if (!leagueFound){
+                   if (!leagueFound){
                         lbl_team_message1.setText("Make sure league is in Database");
                         lbl_team_message1.setVisible(true);
-                        txt_team_league.setStyle("-fx-border-color: red; -fx-border-width: 2px;");
                     }
 
                 }
@@ -466,17 +440,12 @@ public class TablesController implements Initializable {
         else {
             lbl_team_message1.setVisible(true);
             lbl_team_message1.setText("ID and Capacity must be Digits");
-            txt_league_league.setStyle(null);
-            txt_league_country.setStyle(null);
-            txt_team_id.setStyle("-fx-border-color: red; -fx-border-width: 2px;");
-            txt_team_capacity.setStyle("-fx-border-color: red; -fx-border-width: 2px;");
             clear();
         }
 
 
     }// end of teamInsertMethod
     private void teamUpdateRecord() throws SQLException {
-        boolean updated = false;
         boolean in = false;
         boolean leagueFound = false;
         boolean idIsDigit = Utility.checkIfHasOnlyDigits(txt_team_id.getText());
@@ -534,14 +503,11 @@ public class TablesController implements Initializable {
                         lbl_team_message1.setVisible(true);
                         lbl_team_message1.setText("Successful updated team id: " + txt_team_id.getText());
                         clear();
-                        in = true;
-                        updated = true;
                         break;
                     }
                     else {
                         lbl_team_message1.setVisible(true);
                         lbl_team_message1.setText("League not found add it");
-                        in = true;
                         clear();
                         break;
                     }
@@ -550,30 +516,44 @@ public class TablesController implements Initializable {
                 if(!in){
                     lbl_team_message1.setVisible(true);
                     lbl_team_message1.setText("Team ID not found");
+                    break;
                 }
-
             }
         }//end  main for loop
         else {
             lbl_team_message1.setVisible(true);
-            lbl_team_message1.setText("ID and Capacity must be digits");
+            lbl_team_message1.setText("Must enter valid row ID");
             clear();
-            if (updated){
-                lbl_team_message1.setStyle(null);
-            }
         }
 
     }//end of method
+    private void teamDeleteRecord() throws SQLException {
+        boolean idIsNumber = Utility.checkIfHasOnlyDigits(txt_team_id.getText());
+        boolean in = false;
+        if (idIsNumber && !txt_team_id.getText().equals("")){
+            int id = Integer.parseInt(txt_team_id.getText());
 
+            for (Teams t : teamsList) {
+                if (t.getId() == id) {
+                    String query = "DELETE FROM team WHERE team_id = " + txt_team_id.getText();
+                    DBConnection.executeQuery(query);
+                    lbl_team_message1.setVisible(true);
+                    lbl_team_message1.setText("Successful Deleted row id: " + txt_team_id.getText());
+                    in = true;
+                    break;
+                }
 
-
-
-
-
-
-
-
-    private void teamDeleteRecord(){}
+            }//end for loop
+            if (!in){
+                lbl_team_message1.setVisible(true);
+                lbl_team_message1.setText("ID not found in table");
+            }
+        }
+        else  {
+            lbl_team_message1.setVisible(true);
+            lbl_team_message1.setText("Must be valid row ID");
+        }
+    }//end of teamDelete method
     /* the following methods Are teh CRUD for Players Table*/
     private void playerInsertRecord(){}
     private void playerUpdateRecord(){}
