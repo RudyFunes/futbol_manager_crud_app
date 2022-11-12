@@ -17,13 +17,11 @@ public class DBConnection {
 
     private static Connection connection = null;
     private static PreparedStatement preparedStatement = null;
-    private static PreparedStatement psInsert = null;
-    private static PreparedStatement psCheckUserExist = null;
     private static ResultSet resultSet = null;
 
     //Maps to store league and teams
-    private static HashMap<String,Integer> leaguesMap = new HashMap<>();
-    private static HashMap<String,Integer> teamMap = new HashMap<>();
+    private static HashMap<Integer,String> leaguesMap = new HashMap<>();
+    private static HashMap<Integer, String> teamMap = new HashMap<>();
 
 
 
@@ -32,7 +30,7 @@ public class DBConnection {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             ArrayList<String> dbCredentials = FileHandler.getCredentials();
-            connection = DriverManager.getConnection(dbCredentials.get(0), dbCredentials.get(1), dbCredentials.get(2));
+            connection = DriverManager.getConnection( dbCredentials.get(0), dbCredentials.get(1), dbCredentials.get(2));
             return connection;
             }
         catch (SQLException | ClassNotFoundException e){
@@ -50,18 +48,18 @@ public class DBConnection {
         ObservableList<Leagues> leaguesList = FXCollections.observableArrayList();
 
         Connection conn = getDBConnection();
-        preparedStatement = conn.prepareStatement("SELECT * FROM countrie_league;");
+        preparedStatement = conn.prepareStatement("SELECT * FROM league;");
         resultSet = preparedStatement.executeQuery();
 
         Leagues leagues;
         while (resultSet.next()){
-            leagues = new Leagues(resultSet.getInt("league_id"),resultSet.getString("country"),resultSet.getString("league_name"),resultSet.getInt("founded"));
+            leagues = new Leagues(resultSet.getInt("league_id"),resultSet.getString("country"),resultSet.getString("league_name"),resultSet.getInt("year"));
             leaguesList.add(leagues);
         }
         closeDBConnection();
         //populates teh league map with the data from the database
         for (Leagues league : leaguesList){
-            leaguesMap.put(league.getLeague(),league.getId());
+            leaguesMap.put(league.getId(),league.getLeague());
         }
         return leaguesList;
     }
@@ -69,9 +67,9 @@ public class DBConnection {
     public static String getRightLeague(int leagueID){
 
         //if the league id is found then return the name of the league
-        for(Map.Entry<String,Integer> entry : leaguesMap.entrySet() ){
-            if (entry.getValue() == leagueID){
-                return entry.getKey();
+        for(Map.Entry<Integer,String> entry : leaguesMap.entrySet() ){
+            if (entry.getKey() == leagueID){
+                return entry.getValue();
             }
         }
         return "";
@@ -96,16 +94,16 @@ public class DBConnection {
         closeDBConnection();
         //populates teh team map with the data from the database
         for (Teams team : teamsList){
-            teamMap.put(team.getTeam_name(),team.getId());
+            teamMap.put(team.getId(),team.getTeam_name());
         }
         return teamsList;
     }
     // get right team method
     public static String getRightTeam(int leagueID){
         //if the league id is found then return the name of the league
-        for(Map.Entry<String,Integer> entry : teamMap.entrySet() ){
-            if (entry.getValue() == leagueID){
-                return entry.getKey();
+        for(Map.Entry<Integer,String> entry : teamMap.entrySet() ){
+            if (entry.getKey() == leagueID){
+                return entry.getValue();
             }
         }
         return "";
@@ -129,8 +127,6 @@ public class DBConnection {
 
         return playersList;
     }
-
-
 //-------------------------------------------------------------------------------------------
     public  static void executeQuery(String query) throws SQLException {
 

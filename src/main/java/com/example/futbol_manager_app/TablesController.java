@@ -66,9 +66,9 @@ public class TablesController implements Initializable {
     private ObservableList<Players> playersList;
 
     //------- stored all leagues names and leagues id  in a Hashmap Variable----
-    HashMap <String,Integer> allLeagues;
-    HashMap <String, Integer> allTeams;
-    HashMap <String,Integer> allPlayers;
+    HashMap <Integer, String> allLeagues;
+    HashMap <Integer, String> allTeams;
+    HashMap <Integer, String> allPlayers;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -84,9 +84,11 @@ public class TablesController implements Initializable {
         allLeagues = new HashMap<>();
         allTeams = new HashMap<>();
         allPlayers = new HashMap<>();
-        //display league table at run time
+        //preLoad tables data
         try {
             league_table();
+            team_table();
+            player_table();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -252,7 +254,7 @@ public class TablesController implements Initializable {
         table_view_team.setItems(teamsList);
         //------- stored team name and team_id in a Hashmap Variable
         for (Teams teams : teamsList){
-            allTeams.put(teams.getTeam_name(), teams.getId());
+            allTeams.put(teams.getId(),teams.getTeam_name());
         }
 
 
@@ -270,7 +272,7 @@ public class TablesController implements Initializable {
 
         //------- stored league name and league id in a Hashmap Variable
         for (Leagues leagues : leaguesList){
-            allLeagues.put(leagues.getLeague(),leagues.getId());
+            allLeagues.put(leagues.getId(),leagues.getLeague());
         }
     }
     private void player_table() throws SQLException {
@@ -288,7 +290,7 @@ public class TablesController implements Initializable {
         table_view_player.setItems(playersList);
         //------- stored team name and team_id in a Hashmap Variable
         for (Players players : playersList){
-            allPlayers.put(players.getPlayer_name(),players.getId());
+            allPlayers.put(players.getId(),players.getPlayer_name());
         }
     }
     /* the following methods Are teh CRUD for Leagues Table*/
@@ -297,7 +299,7 @@ public class TablesController implements Initializable {
         boolean yearIsDigit = Utility.checkIfHasOnlyDigits(txt_league_year.getText());
         lbl_league_message1.setVisible(false);
 
-        String query =  "INSERT INTO countrie_league (country,league_name,founded)" +
+        String query =  "INSERT INTO league (country,league_name,year)" +
                 "VALUES ('" + txt_league_country.getText() + "','" + txt_league_league.getText() +  "',"  + txt_league_year.getText() +");";
 
         /* validation check for text boxes*/
@@ -345,8 +347,8 @@ public class TablesController implements Initializable {
                         txt_league_year.setText(String.valueOf(l.getYear()));
                     }
 
-                    String query = "UPDATE countrie_league SET country = '" + txt_league_country.getText() +"', league_name ='" + txt_league_league.getText()
-                            + "', founded = " + txt_league_year.getText() + " WHERE league_id = " + txt_league_id.getText() +";";
+                    String query = "UPDATE league SET country = '" + txt_league_country.getText() +"', league_name ='" + txt_league_league.getText()
+                            + "', year = " + txt_league_year.getText() + " WHERE league_id = " + txt_league_id.getText() +";";
 
                     DBConnection.executeQuery(query);
                     lbl_league_message1.setVisible(true);
@@ -377,7 +379,7 @@ public class TablesController implements Initializable {
 
             for (Leagues l : leaguesList) {
                 if (l.getId() == id) {
-                    String query = "DELETE FROM countrie_league WHERE league_id = " + txt_league_id.getText();
+                    String query = "DELETE FROM league WHERE league_id = " + txt_league_id.getText();
                     DBConnection.executeQuery(query);
                     lbl_league_message1.setVisible(true);
                     lbl_league_message1.setText("Successful Deleted row id: " + txt_league_id.getText());
@@ -406,10 +408,10 @@ public class TablesController implements Initializable {
 
 
         //validate query
-        if ( (idIsDigit && capacityIsDigit) && ( !txt_team_id.getText().equals("") || !txt_team_capacity.getText().equals("")) ){
+        if ( (idIsDigit && capacityIsDigit) && ( !txt_team_id.getText().equals("") && !txt_team_capacity.getText().equals("")) ){
             //check to see if league already exist in the database
-            for (Map.Entry<String,Integer> entry : allLeagues.entrySet()){
-                if (txt_team_league.getText().equals(entry.getKey())){
+            for (Map.Entry<Integer,String> entry : allLeagues.entrySet()){
+                if (txt_team_league.getText().equals(entry.getValue())){
                     query =  "INSERT INTO team (team_name,team_location,stadium,capacity,league_id)" +
                             "VALUES ('" + txt_team_name.getText() + "','" + txt_team_location.getText() +  "','"  + txt_team_stadium.getText() + "'," +
                             txt_team_capacity.getText()   + "," + entry.getValue() +");";
@@ -440,7 +442,6 @@ public class TablesController implements Initializable {
         else {
             lbl_team_message1.setVisible(true);
             lbl_team_message1.setText("ID and Capacity must be Digits");
-            clear();
         }
 
 
@@ -458,7 +459,7 @@ public class TablesController implements Initializable {
             int id = Integer.parseInt(txt_team_id.getText());
             for (Teams t : teamsList) {
                 if (t.getId() == id) {
-
+                    in = true;
                     if (txt_team_name.getText().equals("")  ){
                         txt_team_name.setText(t.getTeam_name()) ;
                     }
@@ -474,8 +475,8 @@ public class TablesController implements Initializable {
 
                     //if not league selected to be updated keeps the same already in data
                     if (txt_team_league.getText().equals("")){
-                        for(Map.Entry<String,Integer> entry : allLeagues.entrySet()){
-                            if (t.getLeague_id() == entry.getValue()){
+                        for(Map.Entry<Integer, String> entry : allLeagues.entrySet()){
+                            if (t.getLeague_id() == entry.getKey()){
                                 txt_team_league.setText(String.valueOf(entry.getKey()));
                                 leagueFound = true;
                                 break;
@@ -484,16 +485,14 @@ public class TablesController implements Initializable {
                     }
                     //check to see if league exist before entering the value
                     if (!txt_team_league.getText().equals("")){
-                        for(Map.Entry<String,Integer> entry : allLeagues.entrySet()){
-                            if (txt_team_league.getText().equals(entry.getKey())){
-                                txt_team_league.setText(String.valueOf(entry.getValue()));
+                        for(Map.Entry<Integer,String> entry : allLeagues.entrySet()){
+                            if (txt_team_league.getText().equals(entry.getValue())){
+                                txt_team_league.setText(String.valueOf(entry.getKey()));
                                 leagueFound = true;
                                 break;
                             }
                         }
                     }
-
-
                     if (leagueFound ){
                         String query = "UPDATE team SET team_name = '" + txt_team_name.getText() +"', team_location ='" + txt_team_location.getText()
                                 + "', stadium = '" + txt_team_stadium.getText()   + "', capacity = '" + txt_team_capacity.getText()   + "', league_id = '" + txt_team_league.getText()
@@ -516,7 +515,6 @@ public class TablesController implements Initializable {
                 if(!in){
                     lbl_team_message1.setVisible(true);
                     lbl_team_message1.setText("Team ID not found");
-                    break;
                 }
             }
         }//end  main for loop
@@ -532,7 +530,6 @@ public class TablesController implements Initializable {
         boolean in = false;
         if (idIsNumber && !txt_team_id.getText().equals("")){
             int id = Integer.parseInt(txt_team_id.getText());
-
             for (Teams t : teamsList) {
                 if (t.getId() == id) {
                     String query = "DELETE FROM team WHERE team_id = " + txt_team_id.getText();
@@ -555,7 +552,165 @@ public class TablesController implements Initializable {
         }
     }//end of teamDelete method
     /* the following methods Are teh CRUD for Players Table*/
-    private void playerInsertRecord(){}
-    private void playerUpdateRecord(){}
-    private void playerDeleteReocrd(){}
+    private void playerInsertRecord() throws SQLException {
+        boolean idIsDigit = Utility.checkIfHasOnlyDigits(txt_player_id.getText());
+        boolean numberIsDigit = Utility.checkIfHasOnlyDigits(txt_player_number.getText());
+        boolean ageIsDigit = Utility.checkIfHasOnlyDigits(txt_player_age.getText());
+        boolean leagueFound = false;
+        String query = "";
+        lbl_player_message1.setVisible(false);
+
+
+        //validate fields with digits
+        if ( ((idIsDigit && numberIsDigit && ageIsDigit ) && (!txt_player_id.getText().equals("") && !txt_player_number.getText().equals("") &&
+                !txt_player_age.getText().equals(""))) ){
+            //check to see if team already exist in the database
+            for (Map.Entry<Integer,String> entry : allTeams.entrySet()){
+                if (txt_player_team.getText().equals(entry.getValue())){
+                    query =  "INSERT INTO players (name,j_number,age,team_id,position,nationality)" +
+                            "VALUES ('" + txt_player_name.getText() + "','" + txt_player_number.getText() +  "','"  + txt_player_age.getText() + "'," +
+                            entry.getKey() + ",'" + txt_player_position.getText() + "','"   + txt_player_nationality.getText() + "');";
+                    leagueFound = true;
+                    break;
+                }
+            }
+            /* validation check for text boxes not equal empty*/
+            if (!txt_player_name.getText().equals("") &&!txt_player_team.getText().equals("")  && !txt_player_position.getText().equals("")  &&
+                    !txt_player_nationality.getText().equals("") && leagueFound){
+                System.out.println(query);
+                DBConnection.executeQuery(query);
+                lbl_player_message1.setVisible(true);
+                lbl_player_message1.setText("Row successfully added");
+                clear();
+            }
+            else {
+                lbl_player_message1.setVisible(true);
+                lbl_player_message1.setText("All Field Are Required");
+                if (!leagueFound){
+                    lbl_player_message1.setText("Make sure team is in Database");
+                    lbl_player_message1.setVisible(true);
+                }
+
+            }
+        }
+        else {
+            lbl_player_message1.setVisible(true);
+            lbl_player_message1.setText("ID, Number and Age must be digits");
+        }
+
+
+    }
+    private void playerUpdateRecord() throws SQLException {
+        boolean in = false;
+        boolean leagueFound = false;
+        boolean idIsDigit = Utility.checkIfHasOnlyDigits(txt_player_id.getText());
+        boolean numberIsDigit = Utility.checkIfHasOnlyDigits(txt_player_number.getText());
+        boolean ageIsDigit = Utility.checkIfHasOnlyDigits(txt_player_age.getText());
+        lbl_player_message1.setVisible(false);
+
+
+        /* validation check for text boxes*/
+        if ( (idIsDigit && !txt_player_id.getText().equals(""))  && (numberIsDigit || !txt_player_number.getText().equals("")) && (ageIsDigit || !txt_player_age.getText().equals("")) ){
+            int id = Integer.parseInt(txt_player_id.getText());
+            for (Players p : playersList) {
+                if (p.getId() == id) {
+
+                    if (txt_player_name.getText().equals("")  ){
+                        txt_player_name.setText(p.getPlayer_name()) ;
+                    }
+                    if (txt_player_number.getText().equals("") ){
+                        txt_player_number.setText(String.valueOf(p.getPlayer_number()));
+                    }
+                    if (txt_player_age.getText().equals("")){
+                        txt_player_age.setText(String.valueOf(p.getPlayer_age()));
+                    }
+
+                    if(txt_player_position.getText().equals("")){
+                        txt_player_position.setText(String.valueOf(p.getPlayer_position()));
+                    }
+                    if(txt_player_nationality.getText().equals("")){
+                        txt_player_nationality.setText(p.getPlayer_country());
+                    }
+
+                    //if not player team selected to be updated keeps the same already in data
+                    if (txt_player_team.getText().equals("")){
+                        for(Map.Entry<Integer,String> entry : allTeams.entrySet()){
+                            if (p.getTeam_id() == entry.getKey()){
+                                txt_player_team.setText(entry.getValue());
+                                leagueFound = true;
+                                break;
+                            }
+                        }
+                    }
+                    //check to see if  player team exist before entering the value
+                    if (!txt_player_team.getText().equals("")){
+                        for(Map.Entry<Integer,String> entry : allTeams.entrySet()){
+                            if (txt_player_team.getText().equals(entry.getValue())){
+                                txt_player_team.setText(String.valueOf(entry.getKey()));
+                                leagueFound = true;
+                                break;
+                            }
+                        }
+                    }
+                    for(Map.Entry<Integer,String> entry : allTeams.entrySet()){
+                        System.out.println(entry.getValue());
+                    }
+
+                    if (leagueFound ){
+                        String query = "UPDATE players SET name = '" + txt_player_name.getText() +"', j_number ='" + txt_player_number.getText()
+                                + "', age = '" + txt_player_age.getText()   + "', team_id = " + txt_player_team.getText()   + ", position = '" + txt_player_position.getText()
+                                + "', nationality = '" + txt_player_nationality.getText() + "' WHERE player_id = " + txt_player_id.getText() +";";
+
+                        DBConnection.executeQuery(query);
+                        lbl_player_message1.setVisible(true);
+                        lbl_player_message1.setText("Successful updated player id: " + txt_team_id.getText());
+                        clear();
+                        break;
+                    }
+                    else {
+                        lbl_player_message1.setVisible(true);
+                        lbl_player_message1.setText("Team not found add it");
+                        break;
+                    }
+                }// end nested if
+
+                if(!in){
+                    lbl_player_message1.setVisible(true);
+                    lbl_player_message1.setText("Player ID not found");
+                }
+            }
+        }//end  main for loop
+        else {
+            lbl_player_message1.setVisible(true);
+            lbl_player_message1.setText("Must enter valid row ID");
+        }
+
+
+    }
+    private void playerDeleteReocrd() throws SQLException {
+        boolean idIsNumber = Utility.checkIfHasOnlyDigits(txt_player_id.getText());
+        boolean in = false;
+        if (idIsNumber && !txt_player_id.getText().equals("")){
+            int id = Integer.parseInt(txt_player_id.getText());
+            for (Players p: playersList) {
+                if (p.getId() == id) {
+                    String query = "DELETE FROM players WHERE player_id = " + txt_player_id.getText();
+                    DBConnection.executeQuery(query);
+                    lbl_player_message1.setVisible(true);
+                    lbl_player_message1.setText("Successful Deleted row id: " + txt_player_id.getText());
+                    in = true;
+                    break;
+                }
+
+            }//end for loop
+            if (!in){
+                lbl_player_message1.setVisible(true);
+                lbl_player_message1.setText("ID not found in table");
+            }
+        }
+        else  {
+            lbl_player_message1.setVisible(true);
+            lbl_player_message1.setText("Must enter valid row ID");
+        }
+    }
 }

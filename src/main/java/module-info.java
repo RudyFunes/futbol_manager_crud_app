@@ -9,6 +9,7 @@ module com.example.futbol_manager_app {
     requires org.kordamp.bootstrapfx.core;
     requires eu.hansolo.tilesfx;
     requires java.sql;
+    requires mysql.connector.java;
 
     opens com.example.futbol_manager_app to javafx.fxml;
     exports com.example.futbol_manager_app;

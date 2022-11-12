@@ -1,5 +1,6 @@
 package com.example.futbol_manager_app;
 
+import com.example.futbol_manager_app.Utils.FileHandler;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -8,6 +9,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class ChangeScene {
@@ -40,13 +42,6 @@ public class ChangeScene {
                 e.printStackTrace();
             }
         }
-//        if (title.equals("Futbol Managers") && fxmlFile.equals("hello-view.fxml")){
-//            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-//            stage.setTitle(title);
-//            stage.setScene(new Scene(root,600,400));
-//            stage.centerOnScreen();
-//            stage.show();
-//        }
 
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
 //        Scene scene = new Scene(root);
@@ -65,9 +60,9 @@ public class ChangeScene {
         HashMap <String, String> userValidation = new HashMap<>();
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-
-            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/futbol","root","rudyj4000");
-            psCheckUserExist = connection.prepareStatement("SELECT * FROM users WHERE username = ?");
+            ArrayList<String> dbCredentials = FileHandler.getCredentials();
+            connection = DriverManager.getConnection(dbCredentials.get(0),dbCredentials.get(1),dbCredentials.get(2));
+            psCheckUserExist = connection.prepareStatement("SELECT username,password FROM users WHERE username = ?");
             psCheckUserExist.setString(1,userName);
 
             resultSet = psCheckUserExist.executeQuery();

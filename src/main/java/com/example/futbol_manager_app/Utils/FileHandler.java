@@ -11,7 +11,8 @@ public class FileHandler {
 
     public  static ArrayList<String> getCredentials(){
 
-        File file = new File("C:\\Users\\rudym\\Desktop\\MairaDB\\MariaDBCredentials.txt");
+//        File file = new File("C:\\Users\\rudym\\Desktop\\MairaDB\\MariaDBCredentials.txt");  // local Maria db
+        File file = new File("C:\\Users\\rudym\\Desktop\\AWS\\MariaDB-Server\\Conetion Credentials\\MariaDB_User_Credentials.txt");
         try {
             Scanner scan = new Scanner(file);
             while (scan.hasNext()){
