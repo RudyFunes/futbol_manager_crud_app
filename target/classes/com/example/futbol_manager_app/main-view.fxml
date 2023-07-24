@@ -15,7 +15,7 @@
                         <Image url="@../../../images/Logo1.png" />
                     </image>
                 </ImageView>
-                <Label layoutX="15.0" layoutY="191.0" prefHeight="10.0" prefWidth="191.0" text="rudymarquezigbm@gmail.com" textAlignment="CENTER">
+                <Label visible="false" layoutX="15.0" layoutY="191.0" prefHeight="10.0" prefWidth="191.0" text="rudymarquezigbm@gmail.com" textAlignment="CENTER">
                     <font>
                         <Font size="13.0" />
                     </font>

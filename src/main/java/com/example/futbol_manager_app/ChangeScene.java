@@ -61,7 +61,7 @@ public class ChangeScene {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             ArrayList<String> dbCredentials = FileHandler.getCredentials();
-            connection = DriverManager.getConnection(dbCredentials.get(0),dbCredentials.get(1),dbCredentials.get(2));
+            connection = DriverManager.getConnection(dbCredentials.get(5),dbCredentials.get(6),dbCredentials.get(7));
             psCheckUserExist = connection.prepareStatement("SELECT username,password FROM users WHERE username = ?");
             psCheckUserExist.setString(1,userName);
 

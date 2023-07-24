@@ -10,6 +10,8 @@ module com.example.futbol_manager_app {
     requires eu.hansolo.tilesfx;
     requires java.sql;
     requires mysql.connector.java;
+    requires junit;
+    requires org.junit.jupiter.api;
 
     opens com.example.futbol_manager_app to javafx.fxml;
     exports com.example.futbol_manager_app;

@@ -30,7 +30,9 @@ public class DBConnection {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             ArrayList<String> dbCredentials = FileHandler.getCredentials();
-            connection = DriverManager.getConnection( dbCredentials.get(0), dbCredentials.get(1), dbCredentials.get(2));
+//            System.out.println(dbCredentials.get(5));  // see what is inse the file
+            connection = DriverManager.getConnection( dbCredentials.get(5), dbCredentials.get(6), dbCredentials.get(7));
+
             return connection;
             }
         catch (SQLException | ClassNotFoundException e){

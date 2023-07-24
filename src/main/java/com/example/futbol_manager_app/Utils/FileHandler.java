@@ -17,6 +17,7 @@ public class FileHandler {
             Scanner scan = new Scanner(file);
             while (scan.hasNext()){
                 dbCredentials.add(scan.nextLine());
+//                System.out.println(dbCredentials.get(0));
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
